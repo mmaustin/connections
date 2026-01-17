@@ -18,3 +18,14 @@ export type TileState = {
   14: boolean,
   15: boolean,
 };
+
+export type AnswerArray = [string, string, string, string];
+
+// export type AnswerArrays = [
+//   { id: number; arr: string[];},
+//   { id: number; arr: string[];},
+//   { id: number; arr: string[];},
+//   { id: number; arr: string[];}
+// ];
+
+export type AnswerArrays = { id: number, arr: string[]}[];

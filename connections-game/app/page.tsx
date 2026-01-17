@@ -1,9 +1,15 @@
-
 'use client';
 
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { TileState } from "@/types/customTypes";
+import { TileState, AnswerArrays } from "@/types/customTypes";
+
+const initialAnswerArrays: AnswerArrays = [
+  { id: 0, arr: [] },
+  { id: 1, arr: [] },
+  { id: 2, arr: [] },
+  { id: 3, arr: [] }
+]
 
 const initialTileState: TileState = {
   0: false,
@@ -22,7 +28,7 @@ const initialTileState: TileState = {
   13: false,
   14: false,
   15: false,
-}
+};
 
 export default function Home() {
 
@@ -32,53 +38,89 @@ export default function Home() {
 
   const [tileStatus, setTileStatus] = useState<TileState>(initialTileState);
 
+  //const [answerArrayOne, setAnswerArrayOne] = useState<Array<string>>([]);
+  const [answerArrayOne, setAnswerArrayOne] = useState<AnswerArrays>(initialAnswerArrays);
+
+  //const [storageArray, setStorageArray] = useState<number>(0);
+
 
   const boardTiles = Array.from({ length: 16 }, (_, i) => {
-    return <Button key={i} data-tile={i} onClick={handleColor} size='lg' variant="secondary" className="border border-red-700 bg-amber-200" disabled={isDisabled}>TILE</Button>
+    const testValues = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourt'n", "fifteen", "sixteen"];
+
+    return <Button key={i} data-tile={i} onClick={handleColor} size='lg' variant="secondary" className="border border-red-700 bg-amber-200" disabled={isDisabled}>{testValues[i]}</Button>
   });
 
   const boardTilesPlusThree = Object.values(tileStatus).map((val, i) => {
-    if(val === true){
-      return <Button key={i} data-tile={i} onClick={handleColor} size='lg' variant="secondary" className="border border-red-700 bg-amber-200" disabled={false}>TILE</Button>
+    const testValues = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fift'n", "sixteen"];
+
+    if (val === true) {
+      return <Button key={i} data-tile={i} onClick={handleColor} size='lg' variant="secondary" className="border border-red-700 bg-amber-200" disabled={false}>{testValues[i]}</Button>
     } else {
-      return <Button key={i} data-tile={i} onClick={handleColor} size='lg' variant="secondary" className="border border-red-700 bg-amber-200" disabled={true}>TILE</Button>
+      return <Button key={i} data-tile={i} onClick={handleColor} size='lg' variant="secondary" className="border border-red-700 bg-amber-200" disabled={true}>{testValues[i]}</Button>
     }
   });
 
-  function parameterToSetTileStatus(tile: string | undefined) {
+  function parameterToSetTileStatus(tile: string | undefined, b: boolean) {
     for (const property in tileStatus) {
       if (property === tile) {
         setTileStatus({
           ...tileStatus,
-          [property]: true,
+          [property]: b,
         });
-        console.log(tileStatus, property, tile);
         break;
       } else {
-        continue; 
+        continue;
       }
     }
   };
+
+  function addToArray(tileValue: string) {
+      
+    const nextArray: AnswerArrays = answerArrayOne.map((a, i) => {
+      if (a.id === 0) {
+        return { id: i, arr: [...a.arr].concat([tileValue]) };
+      } else {
+        return a;
+      }
+    });
+    // setAnswerArrayOne([
+    //   ...answerArrayOne,
+    //   tileValue
+    // ])
+    setAnswerArrayOne(
+      nextArray
+    )
+    console.log(nextArray);
+
+  };
+
+  // function removeFromArray(tileValue: string){
+  //   setAnswerArrayOne(
+  //     answerArrayOne.filter(answer => answer != tileValue)
+  //   );
+  // };
 
   function handleColor(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault()
 
     if (e.currentTarget.classList.contains('bg-amber-200')) {
       e.currentTarget.classList.remove('bg-amber-200');
-      parameterToSetTileStatus(e.currentTarget.dataset.tile);
+      parameterToSetTileStatus(e.currentTarget.dataset.tile, true);
 
       e.currentTarget.classList.add('bg-amber-500');
+      addToArray(e.currentTarget.innerHTML);
       setSelectedCount(selectedCount + 1);
-      //if (selectedCount === 3) setIsDisabled(true);
     } else {
       e.currentTarget.classList.remove('bg-amber-500');
       e.currentTarget.classList.add('bg-amber-200');
+      //removeFromArray(e.currentTarget.innerHTML);
       setSelectedCount(selectedCount - 1);
-      //if (selectedCount && selectedCount < 4) setIsDisabled(false);
+      parameterToSetTileStatus(e.currentTarget.dataset.tile, false);
 
     };
-
   };
+
+  console.log(answerArrayOne);
 
   function enable() {
     setIsDisabled(false);
