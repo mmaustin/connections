@@ -33,21 +33,21 @@ const initialTileState: TileState = {
 export default function Home() {
 
   const [selectedCount, setSelectedCount] = useState<number>(0);
-
-  const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  //Commented out to test if the  answer array switches to the next array properly
+  //const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
   const [tileStatus, setTileStatus] = useState<TileState>(initialTileState);
 
-  //const [answerArrayOne, setAnswerArrayOne] = useState<Array<string>>([]);
   const [answerArrayOne, setAnswerArrayOne] = useState<AnswerArrays>(initialAnswerArrays);
 
-  //const [storageArray, setStorageArray] = useState<number>(0);
+  const [whichStorageArray, setWhichStorageArray] = useState<number>(0);
 
 
   const boardTiles = Array.from({ length: 16 }, (_, i) => {
     const testValues = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourt'n", "fifteen", "sixteen"];
-
-    return <Button key={i} data-tile={i} onClick={handleColor} size='lg' variant="secondary" className="border border-red-700 bg-amber-200" disabled={isDisabled}>{testValues[i]}</Button>
+    //Commented out to test if the  answer array switches to the next array properly
+    // return <Button key={i} data-tile={i} onClick={handleColor} size='lg' variant="secondary" className="border border-red-700 bg-amber-200" disabled={isDisabled}>{testValues[i]}</Button>
+    return <Button key={i} data-tile={i} onClick={handleColor} size='lg' variant="secondary" className="border border-red-700 bg-amber-200" >{testValues[i]}</Button>
   });
 
   const boardTilesPlusThree = Object.values(tileStatus).map((val, i) => {
@@ -77,7 +77,7 @@ export default function Home() {
   function addToArray(tileValue: string) {
       
     const nextArray: AnswerArrays = answerArrayOne.map((a, i) => {
-      if (a.id === 0) {
+      if (a.id === whichStorageArray) {
         return { id: i, arr: [...a.arr].concat([tileValue]) };
       } else {
         return a;
@@ -87,18 +87,37 @@ export default function Home() {
     //   ...answerArrayOne,
     //   tileValue
     // ])
+    
+    
     setAnswerArrayOne(
       nextArray
     )
+    //Changing to the next array will be done on submit in the functioning game.
+    if(nextArray[whichStorageArray].arr.length === 4){
+      setWhichStorageArray(whichStorageArray + 1);
+    };
+
     console.log(nextArray);
 
   };
 
-  // function removeFromArray(tileValue: string){
-  //   setAnswerArrayOne(
-  //     answerArrayOne.filter(answer => answer != tileValue)
-  //   );
-  // };
+  function removeFromArray(tileValue: string, arrayValue: number){
+    //This works for the rigged system I currently have, but everything rests on not being able to access an array after a successful submission has been made.
+    const newArraySet = answerArrayOne.map(a => {
+      if(a.id === arrayValue){
+        const filteredArr = a.arr.filter(word => word !== tileValue);
+        return {id: a.id, arr: filteredArr}
+      } else {
+        return a;
+      }
+    })
+
+    setAnswerArrayOne(
+      //original logic
+      //answerArrayOne.filter(answer => answer != tileValue);
+      newArraySet
+    );
+  };
 
   function handleColor(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault()
@@ -113,7 +132,7 @@ export default function Home() {
     } else {
       e.currentTarget.classList.remove('bg-amber-500');
       e.currentTarget.classList.add('bg-amber-200');
-      //removeFromArray(e.currentTarget.innerHTML);
+      removeFromArray(e.currentTarget.innerHTML, whichStorageArray);
       setSelectedCount(selectedCount - 1);
       parameterToSetTileStatus(e.currentTarget.dataset.tile, false);
 
@@ -121,19 +140,20 @@ export default function Home() {
   };
 
   console.log(answerArrayOne);
-
-  function enable() {
-    setIsDisabled(false);
-  }
+  //Commented out to test if the  answer array switches to the next array properly
+  // function enable() {
+  //   setIsDisabled(false);
+  // }
 
   return (
     <div className=" h-screen w-full flex flex-col justify-center items-center" >
       <p className="mb-5 text-4xl font-extrabold"> Wannabe Connections</p>
       <div className="w-[250px] h-[300px] border-2 border-green-700 grid grid-cols-4 gap-2 p-3">
-        {selectedCount < 4 ? boardTiles : boardTilesPlusThree}
-        {/* {boardTiles} */}
+      {/* Commented out to test if the  answer array switches to the next array properly */}
+        {/* {selectedCount < 4 ? boardTiles : boardTilesPlusThree} */}
+        {boardTiles}
       </div>
-      <Button onClick={enable} >Enable</Button>
+      {/* <Button onClick={enable} >Enable</Button> */}
     </div>
   );
 }
