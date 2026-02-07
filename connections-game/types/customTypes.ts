@@ -29,3 +29,7 @@ export type AnswerArray = [string, string, string, string];
 // ];
 
 export type AnswerArrays = { id: number, arr: string[]}[];
+
+type TileColor = "purple" | "green" | "blue" | "yellow";
+
+export type ValueArray = {value: string, chosen: boolean, color: TileColor}[];

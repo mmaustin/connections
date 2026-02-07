@@ -2,14 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { TileState, AnswerArrays } from "@/types/customTypes";
+import { TileState, AnswerArrays, ValueArray } from "@/types/customTypes";
+
 
 const initialAnswerArrays: AnswerArrays = [
   { id: 0, arr: [] },
   { id: 1, arr: [] },
   { id: 2, arr: [] },
   { id: 3, arr: [] }
-]
+];
 
 const initialTileState: TileState = {
   0: false,
@@ -31,32 +32,69 @@ const initialTileState: TileState = {
 };
 
 export default function Home() {
-
+  
   const [selectedCount, setSelectedCount] = useState<number>(0);
   //Commented out to test if the  answer array switches to the next array properly
   //const [isDisabled, setIsDisabled] = useState<boolean>(false);
-
+  const [chosenBoolean, setChosenBoolean] = useState<boolean>(false);
+  
   const [tileStatus, setTileStatus] = useState<TileState>(initialTileState);
-
+  
   const [answerArrayOne, setAnswerArrayOne] = useState<AnswerArrays>(initialAnswerArrays);
-
+  
   const [whichStorageArray, setWhichStorageArray] = useState<number>(0);
-
-
+  
+  
   const boardTiles = Array.from({ length: 16 }, (_, i) => {
-    const testValues = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourt'n", "fifteen", "sixteen"];
+    // const testValues = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourt'n", "fifteen", "sixteen"];
+    const gameValues: ValueArray = [
+      {value: "Cubs", color: "yellow", chosen: chosenBoolean},
+      {value: "Joe Gibbs", color: "purple", chosen: chosenBoolean},
+      {value: "Man U", color: "green", chosen: chosenBoolean},
+      {value: "Blue Hens", color: "blue", chosen: chosenBoolean},
+      {value: "Yankees", color: "yellow", chosen: chosenBoolean},
+      {value: "Trackhouse", color: "purple", chosen: chosenBoolean},
+      {value: "Hotspurs", color: "green", chosen: chosenBoolean},
+      {value: "Milikens", color: "blue", chosen: chosenBoolean},
+      {value: "Dodgers", color: "yellow", chosen: chosenBoolean},
+      {value: "Front Row", color: "purple", chosen: chosenBoolean},
+      {value: "Gunners", color: "green", chosen: chosenBoolean},
+      {value: "Green Wave", color: "blue", chosen: chosenBoolean},
+      {value: "Mets", color: "yellow", chosen: chosenBoolean},
+      {value: "23, 11", color: "purple", chosen: chosenBoolean},
+      {value: "Reds", color: "green", chosen: chosenBoolean},
+      {value: "Blue Devils", color: "blue", chosen: chosenBoolean},
+    ];
     //Commented out to test if the  answer array switches to the next array properly
     // return <Button key={i} data-tile={i} onClick={handleColor} size='lg' variant="secondary" className="border border-red-700 bg-amber-200" disabled={isDisabled}>{testValues[i]}</Button>
-    return <Button key={i} data-tile={i} onClick={handleColor} size='lg' variant="secondary" className="border border-red-700 bg-amber-200" >{testValues[i]}</Button>
+    return <Button key={i} data-tile={i} onClick={handleColor} size='lg' variant="secondary" className="border border-red-700 bg-amber-200" >{gameValues[i].value}</Button>
   });
 
   const boardTilesPlusThree = Object.values(tileStatus).map((val, i) => {
-    const testValues = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fift'n", "sixteen"];
+    // const testValues = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fift'n", "sixteen"];
+    const gameValues: ValueArray = [
+      {value: "Cubs", color: "yellow", chosen: chosenBoolean},
+      {value: "Joe Gibbs", color: "purple", chosen: chosenBoolean},
+      {value: "Man U", color: "green", chosen: chosenBoolean},
+      {value: "Blue Hens", color: "blue", chosen: chosenBoolean},
+      {value: "Yankees", color: "yellow", chosen: chosenBoolean},
+      {value: "Trackhouse", color: "purple", chosen: chosenBoolean},
+      {value: "Hotspurs", color: "green", chosen: chosenBoolean},
+      {value: "Milikens", color: "blue", chosen: chosenBoolean},
+      {value: "Dodgers", color: "yellow", chosen: chosenBoolean},
+      {value: "Front Row", color: "purple", chosen: chosenBoolean},
+      {value: "Gunners", color: "green", chosen: chosenBoolean},
+      {value: "Green Wave", color: "blue", chosen: chosenBoolean},
+      {value: "Mets", color: "yellow", chosen: chosenBoolean},
+      {value: "23, 11", color: "purple", chosen: chosenBoolean},
+      {value: "Reds", color: "green", chosen: chosenBoolean},
+      {value: "Blue Devils", color: "blue", chosen: chosenBoolean},
+    ];
 
     if (val === true) {
-      return <Button key={i} data-tile={i} onClick={handleColor} size='lg' variant="secondary" className="border border-red-700 bg-amber-200" disabled={false}>{testValues[i]}</Button>
+      return <Button key={i} data-tile={i} onClick={handleColor} size='lg' variant="secondary" className="border border-red-700 bg-amber-200" disabled={false}>{gameValues[i].value}</Button>
     } else {
-      return <Button key={i} data-tile={i} onClick={handleColor} size='lg' variant="secondary" className="border border-red-700 bg-amber-200" disabled={true}>{testValues[i]}</Button>
+      return <Button key={i} data-tile={i} onClick={handleColor} size='lg' variant="secondary" className="border border-red-700 bg-amber-200" disabled={true}>{gameValues[i].value}</Button>
     }
   });
 
@@ -96,9 +134,6 @@ export default function Home() {
     if(nextArray[whichStorageArray].arr.length === 4){
       setWhichStorageArray(whichStorageArray + 1);
     };
-
-    console.log(nextArray);
-
   };
 
   function removeFromArray(tileValue: string, arrayValue: number){
@@ -139,7 +174,6 @@ export default function Home() {
     };
   };
 
-  console.log(answerArrayOne);
   //Commented out to test if the  answer array switches to the next array properly
   // function enable() {
   //   setIsDisabled(false);
