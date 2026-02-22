@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { TileState, AnswerArrays, ValueArray } from "@/types/customTypes";
+import { TileState, AnswerArrays, ValueArray, TileColor } from "@/types/customTypes";
 
 
 const initialAnswerArrays: AnswerArrays = [
@@ -36,6 +36,8 @@ export default function Home() {
   const [selectedCount, setSelectedCount] = useState<number>(0);
   //Commented out to test if the  answer array switches to the next array properly
   //const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [colorCheckArray, setColorCheckArray] = useState<Array<string|null>>([]);
+
   const [chosenBoolean, setChosenBoolean] = useState<boolean>(false);
   
   const [tileStatus, setTileStatus] = useState<TileState>(initialTileState);
@@ -67,7 +69,7 @@ export default function Home() {
     ];
     //Commented out to test if the  answer array switches to the next array properly
     // return <Button key={i} data-tile={i} onClick={handleColor} size='lg' variant="secondary" className="border border-red-700 bg-amber-200" disabled={isDisabled}>{testValues[i]}</Button>
-    return <Button key={i} data-tile={i} onClick={handleColor} size='lg' variant="secondary" className="border border-red-700 bg-amber-200" >{gameValues[i].value}</Button>
+    return <Button key={i} data-tile={i} data-color={gameValues[i].color} onClick={handleColor} size='lg' variant="secondary" className="border border-red-700 bg-amber-200" >{gameValues[i].value}</Button>
   });
 
   const boardTilesPlusThree = Object.values(tileStatus).map((val, i) => {
@@ -110,6 +112,11 @@ export default function Home() {
         continue;
       }
     }
+  };
+
+  function addToColorArray(color: TileColor){
+    //const colorAddition = colorCheckArray.concat([color]);
+    setColorCheckArray(colorCheckArray.concat([color]))
   };
 
   function addToArray(tileValue: string) {
@@ -160,7 +167,7 @@ export default function Home() {
     if (e.currentTarget.classList.contains('bg-amber-200')) {
       e.currentTarget.classList.remove('bg-amber-200');
       parameterToSetTileStatus(e.currentTarget.dataset.tile, true);
-
+      addToColorArray(e.currentTarget.dataset.color as TileColor);
       e.currentTarget.classList.add('bg-amber-500');
       addToArray(e.currentTarget.innerHTML);
       setSelectedCount(selectedCount + 1);
@@ -174,6 +181,25 @@ export default function Home() {
     };
   };
 
+  if(colorCheckArray.length === 4){
+    switch(colorCheckArray.join("")){
+      case "purplepurplepurplepurple":
+        console.log("purple category found");
+        break;
+      case "greengreengreengreen":
+        console.log("green category found");
+        break;
+      case "blueblueblueblue":
+        console.log("blue category found");
+        break;
+      case "yellowyellowyellowyellow":
+        console.log("yellow category found");
+        break;
+      default:
+        console.log("you dumb. your answer wrong!");
+    };
+  };
+  
   //Commented out to test if the  answer array switches to the next array properly
   // function enable() {
   //   setIsDisabled(false);
@@ -191,3 +217,7 @@ export default function Home() {
     </div>
   );
 }
+
+
+//Answer array with the four answer colors, to string, check against the string of four colors. if answer array colors, eg, "blueblueblueblue" === "blueblueblueblue" then filter and get back all of the tiles that are not marked chosen true.  This will get the next board on successful submissions.
+//if answer array[0] === "blue", setCheckAnswer("blueblueblueblue"), else if ("purple"), else if ("yellow"), else if ("green"), else return the board as is, because the answer is wrong
