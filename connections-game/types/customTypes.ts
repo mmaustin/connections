@@ -28,8 +28,27 @@ export type AnswerArray = [string, string, string, string];
 //   { id: number; arr: string[];}
 // ];
 
-export type AnswerArrays = { id: number, arr: string[]}[];
+export type AnswerArrays = { id: number, arr: string[] }[];
 
 export type TileColor = "purple" | "green" | "blue" | "yellow";
 
-export type ValueArray = {value: string, chosen: boolean, color: TileColor}[];
+export type ValueArray = { value: string, chosen: boolean, color: TileColor }[];
+
+export type ChosenState = {
+  chosen0: boolean,
+  chosen1: boolean,
+  chosen2: boolean,
+  chosen3: boolean,
+  chosen4: boolean,
+  chosen5: boolean,
+  chosen6: boolean,
+  chosen7: boolean,
+  chosen8: boolean,
+  chosen9: boolean,
+  chosen10: boolean,
+  chosen11: boolean,
+  chosen12: boolean,
+  chosen13: boolean,
+  chosen14: boolean,
+  chosen15: boolean
+};
