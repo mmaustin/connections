@@ -2,7 +2,26 @@
 
 import { Button } from "@/components/ui/button";
 import { AnswerArray, TileColor, ValueArray, ChosenState } from "@/types/customTypes";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+const gameBoardState = [
+  { value: "Cubs", color: "yellow", chosen: false },
+  { value: "Joe Gibbs", color: "purple", chosen: false },
+  { value: "Man U", color: "green", chosen: false },
+  { value: "Blue Hens", color: "blue", chosen: false },
+  { value: "Yankees", color: "yellow", chosen: false },
+  { value: "Trackhouse", color: "purple", chosen: false },
+  { value: "Hotspurs", color: "green", chosen: false },
+  { value: "Milikens", color: "blue", chosen: false },
+  { value: "Dodgers", color: "yellow", chosen: false },
+  { value: "Front Row", color: "purple", chosen: false },
+  { value: "Gunners", color: "green", chosen: false },
+  { value: "Green Wave", color: "blue", chosen: false },
+  { value: "Mets", color: "yellow", chosen: false },
+  { value: "23, 11", color: "purple", chosen: false },
+  { value: "Reds", color: "green", chosen: false },
+  { value: "Blue Devils", color: "blue", chosen: false },
+]
 
 const PerfectGame = () => {
 
@@ -48,6 +67,12 @@ const PerfectGame = () => {
     { value: "Blue Devils", color: "blue", chosen: false },
   ]);
 
+  //console.log(gameBoardState);
+  
+
+  const [indexValues, setIndexValues] = useState<Array<number|null>>([]);
+  
+  
   // const [gameBoardState, setGameBoardState] = useState<ValueArray>([
   //   { value: "Cubs", color: "yellow", chosen: {num: 1, bool: false} },
   //   { value: "Joe Gibbs", color: "purple", chosen: {num: 2, bool: false} },
@@ -67,14 +92,25 @@ const PerfectGame = () => {
   //   { value: "Blue Devils", color: "blue", chosen: {num: 16, bool: false} },
   // ]);
 
+  // const gameBoard = gameBoardState.map((v, i) => {
+  //   //document.querySelectorAll("button").forEach(el => el.style.color = "blue");
+  //   //if (v.chosen === false) {
+  //     return <Button key={i} data-tile={i} data-color={v.color} date-tile="v.chosen" onClick={handleTileClick} size="lg" variant="secondary" className="border border-red-700 bg-amber-200">{v.value}</Button>
+  //   //}
+  // });
+
   const gameBoard = gameBoardState.map((v, i) => {
-    //if (v.chosen === false) {
-      return <Button key={i} data-tile={i} data-color={v.color} date-tile="v.chosen" onClick={handleTileClick} size="lg" variant="secondary" className="border border-red-700 bg-amber-200">{v.value}</Button>
-    //}
+      return <p key={i} data-tile={i} data-color={v.color} date-tile="v.chosen" onClick={handleTileClick} className="border border-red-700 bg-amber-200">{v.value}</p>
   });
 
+
+  function addIndexValues(num: string){
+    setIndexValues(indexValues.concat([parseInt(num)]));
+  };
+
   function changeChosenBoolean(val: string){
-    const nextGameBoard: ValueArray = gameBoardState.map((t, i) => {
+    const nextGameBoard: ValueArray = 
+    gameBoardState.map((t, i) => {
       if(parseInt(val) === i){
         return {
           ...t,
@@ -85,43 +121,33 @@ const PerfectGame = () => {
       }
     });
     setGameBoardState(nextGameBoard);
-    
-    // const changeChosen = "chosen" + val;
-    // setChosenState({
-    //   ...chosenState,
-    //   [changeChosen]: bool,
-    // })
   };
 
-
-  function filterChosen(e: React.MouseEvent<HTMLButtonElement>){
-    
+  function filterChosen(e: React.MouseEvent<HTMLButtonElement>){  
     e.preventDefault()
     const newGameBoard = gameBoardState.filter(tile => {
-      //console.log(newGameBoard);
       
-      if(tile.chosen !== true){   
+      if(tile.chosen !== true){
+        
         return tile;
       }
     });
     setGameBoardState(newGameBoard);
-    //console.log(gameBoardState);
   };
-
-  //console.log(gameBoardState);
   
 
-  function handleTileClick(e: React.MouseEvent<HTMLButtonElement>) {
-    //e.preventDefault()
+  function handleTileClick(e: React.MouseEvent<HTMLParagraphElement>) {
+    e.preventDefault()
 
     if (e.currentTarget.classList.contains('bg-amber-200')) {
       e.currentTarget.classList.remove('bg-amber-200');
       e.currentTarget.classList.add('bg-amber-500');
-      changeChosenBoolean(e.currentTarget.dataset.tile as string)
+      changeChosenBoolean(e.currentTarget.dataset.tile as string);
+      addIndexValues(e.currentTarget.dataset.tile as string)
     } else {
       e.currentTarget.classList.remove('bg-amber-500');
       e.currentTarget.classList.add('bg-amber-200');
-      changeChosenBoolean(e.currentTarget.dataset.tile as string)
+      changeChosenBoolean(e.currentTarget.dataset.tile as string);
     };
   };
 
